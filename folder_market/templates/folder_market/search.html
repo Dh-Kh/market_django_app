@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Search</title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body>
+<div class="container">
+<form action="" method="POST">
+  {% csrf_token %}
+  <div class="input-group" style="width: 600px;">
+      <span class="input-group-text"><i class="fab fa-google"></i></span>
+      <input type="text" class="form-control" name="desired_item" placeholder="Search for an item">
+      <button class="btn btn-outline-secondary" type="submit">
+      	<i class="fa fa-home" aria-hidden="true"></i>
+      </button>
+	</div>
+</form>
+{% block content %}
+{% if desired_list != None %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+<table class="table">
+<tbody>
+{% for i in desired_list %}
+	<tr>
+	<td><a href="{% url 'folder_market:find_your_order' id_product=i.item_id %}">{{i.name}}</a></td>
+	</tr>
+{% endfor %} 
+</tbody>
+	{% if messages %}
+	{% for message in messages %}
+		{{message}}
+	{% endfor %}
+	{% endif %}
+</table>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+	<span aria-hidden="true"></span>
+</button>
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+	{% for message in messages %}
+		<a href="{{message}}" target="_blank">{{message}}</a>
+	{% endfor %}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+	<span aria-hidden="true"></span>
+	</button>
+</div>
+{% endif %}
+<a class="navbar-brand" href="{% url 'folder_market:redirect_index' %}">  
+	<img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCyCK0EShSSwJp7g0zlTx7NX0PfpuqgnAWQotpoktmag&s"
+        class="me-2"
+        height="20"
+        alt="MDB Logo"
+        loading="lazy"
+      /><small>Return</small></a>
+
+{% endblock %}
+</body>
+</html>

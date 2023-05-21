@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+</head>
+<body>
+<div class="container py-5">
+<div class="row d-flex justify-content-center">
+      <div class="col-md-9 col-lg-7 col-xl-5">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex justify-content-between mb-0">
+              <p class="text-muted mb-0">Amount {{ count_items }}</p>
+              <p class="mb-0">${{ price_data }}</p>
+            </div>
+          </div>
+          <div class="rounded-bottom" style="background-color: #eee;">
+            <div class="card-body">
+              <p class="mb-4">Your list:</p>
+
+              <div class="form-outline mb-3">
+                {% for item in your_items %}
+    			{% ifchanged item.added_item.name %} 
+    			<table>
+        		<tr>
+            		<td>{{ item.added_item.name }}</td>
+        		</tr>
+        		</table>
+    			{% endifchanged %}
+				{% endfor %}
+              </div>
+              <hr>
+              <div class="row mb-3">
+                <div class="col-6">
+                  <div class="form-outline">
+                  	<label class="form-label" for="formControlLgXc">Card Number</label>
+                     {% for i in salesman_card %}
+						{% ifchanged i %} 
+						<table>
+        				<tr>		
+							 <td>{% if i %}{{ i }}{% else %}official wallet{% endif %}</td>
+						</tr>
+						</table>
+						{% endifchanged %}
+					{% endfor %}
+                    </div>
+                </div>
+              </div>
+              <hr>
+               <div class="form-outline mb-3">
+                <p>Sum {% for k, v in price_dict.items %}
+					<p>{{k}} {{v}}</p>
+					{% endfor %}
+				</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% if messages %}
+	{% for i in messages %}
+		{{i}}
+	{% endfor %}
+{% endif %}
+</div>
+</body>
+
+</html>

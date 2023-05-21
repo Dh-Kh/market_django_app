@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>List of categories</title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+</head>
+<body>
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th scope="col">Category</th>
+      <th scope="col">List of items</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for category in get_category %}
+    <tr>
+      <td>{{category.category}}</td>
+      <td><a href="{% url 'folder_market:display_current_category' cat_name=category.category %}">url of data</a></td>
+    </tr>
+   {% endfor %}
+    <tr>
+    	<td>Unknown</td>
+    	<td><a href="{% url 'folder_market:display_unknown_category'%}">url of data</a></td>
+    </tr>
+  </tbody>
+
+</table>
+</body>
+</html>

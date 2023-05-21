@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+</head>
+<body>
+	{% if item_category %}
+	<table class="table align-middle">
+  	<thead>
+    <tr>
+      <th scope="col">Category</th>
+      <th scope="col">List of items</th>
+    </tr>
+  	</thead>
+  <tbody>
+  {% for item in item_category %}
+    <tr>
+      <td>{{item.name}}</td>
+      <td><a href="{% url 'folder_market:find_your_order' id_product=item.item_id %}">url of data</a></td>
+    </tr>
+   {% endfor %}
+  </tbody>
+</table>
+	{% else %}
+	<p>Sorry no data</p>
+	<p>For more information and questions:</p>
+	<h3>asksomething@gmail.com</h3>
+	{% endif %}
+</body>
+</html>

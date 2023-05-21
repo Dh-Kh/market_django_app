@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add product</title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+</head>
+<body>
+<div class="container">
+  
+  <section class="panel panel-default">
+<div class="panel-heading"> 
+<h3 class="panel-title">Create Order</h3> 
+</div> 
+<div class="panel-body">
+<form action="" method="POST" enctype="multipart/form-data">
+	{% csrf_token %}
+   <div class="form-group">
+    <label for="name" class="col-sm-3 control-label">Name</label>
+    <div class="col-sm-9">
+      	{{form.name}}
+    </div>
+  </div> 
+  <div class="form-group">
+    <label for="name" class="col-sm-3 control-label">Price</label>
+    <div class="col-sm-9">
+      	{{form.price}}
+    </div>
+  </div> 
+  <div class="form-group">
+    <label for="about" class="col-sm-3 control-label">Description</label>
+    <div class="col-sm-9">
+    	{{form.product_description}}
+    </div>
+  </div>  
+  <div class="form-group">
+    <label for="about" class="col-sm-3 control-label">Category</label>
+    <div class="col-sm-9">
+      {{form.category}}
+    </div>
+  </div>  
+  <div class="form-group">
+    <label for="name" class="col-sm-3 control-label">Download img</label>
+    <div class="col-sm-3">
+      	{{form.imagine_file}}
+    </div>
+  <hr>
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+    	<input type="submit" id = "input_submit" class="btn btn-outline-secondary" value ="Send">
+    </div>
+  </div> 
+</form>
+</div>
+</section>
+</div>
+{% if messages %}
+{% for message in messages %}
+	{{message}}
+{% endfor %}
+{% endif %}
+</body>
+</html>

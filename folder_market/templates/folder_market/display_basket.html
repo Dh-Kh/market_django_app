@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Your basket</title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+</head>
+<body>
+  <div class="container h-100 py-5">
+  	<div class="row d-flex justify-content-center align-items-center h-100">
+  	<div class="d-flex justify-content-between align-items-center mb-4">
+  		<div class="col-10">
+  		<div class="col-10">
+          <h3 class="fw-normal mb-0 text-black">Shopping Cart</h3>
+           <a class="navbar-brand" href="{% url 'folder_market:redirect_index' %}">Return</a>
+        </div>
+    	</div>
+    </div>
+	</div>
+  	{% for data in list_for_basket %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+  	{% for d in data %}
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-10">
+        <div class="card rounded-3 mb-4">
+          <div class="card-body p-4">
+            <div class="row d-flex justify-content-between align-items-center">
+              <div class="col-md-2 col-lg-2 col-xl-2">
+                {% if d.0.imagine_file == None %}
+                <img
+                  src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg"
+                  class="img-fluid rounded-3" alt="Cotton T-shirt">
+                  {% else %}
+                  <img
+                  src="{{d.0.imagine_file.url}}"
+                  class="img-fluid rounded-3" alt="Cotton T-shirt">
+                  {% endif %}
+              </div>
+              <div class="col-md-3 col-lg-3 col-xl-3">
+                <p class="lead fw-normal mb-2">{{d.0.name}}</p>
+                <p><span class="text-muted">Salesman: </span> 
+                	{% if d.0.salesman == None %}
+          				Anonymous  user 
+          			{% else %}
+          			{{ d.0.salesman }}
+          			{% endif %}
+              </div>
+              <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                <h5 class="mb-0">${{d.0.price}}</h5>
+              </div>
+              <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                <button type="button" id = "actionField" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="remove_from_list({{ d.0.item_id }})">
+                <span aria-hidden="true"></span></button>
+              </div>  
+            </div>
+          </div>
+        </div>    
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+    {% endfor %}
+    <script type="text/javascript">
+       function remove_from_list(item_id) {
+        var request = new XMLHttpRequest();
+        request.open('GET', '/folder_market/remove_from_list/' + item_id + '/' , true);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.status === 200) {
+                    location.reload();
+                } else {
+                    alert("Error: " + request.statusText);
+                }
+            }
+        };
+        request.send();
+    }
+    </script>
+    <div class="card">
+    <div class="card-body">
+    <button type="button" class="btn btn-warning btn-block btn-lg" onclick="window.location.href='{% url 'folder_market:payment_action' %}'">
+        Proceed to Pay
+    </button>
+</div>
+
+  </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}{% endblock %}Items list</title>
+  {% load static %} 
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'folder_market:search_item' %}">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/3917/3917132.png"
+        class="me-2"
+        height="20"
+        alt="MDB Logo"
+        loading="lazy"
+      />
+      <small>Search</small>
+    </a>
+    <a class="navbar-brand" href="{% url 'folder_market:dashboard_salesmans' %}">
+      <img
+        src="https://static.thenounproject.com/png/4038155-200.png"
+        class="me-2"
+        height="20"
+        alt="MDB Logo"
+        loading="lazy"
+      />
+      <small>Account</small>
+    </a>
+      <a class="navbar-brand" href="{% url 'folder_market:dashboard_items' %}">
+        <img
+        src="https://static.thenounproject.com/png/4410346-200.png"
+        class="me-2"
+        height="20"
+        alt="MDB Logo"
+        loading="lazy"
+        />
+        <small>Create order</small>
+      </a>
+      <a class="navbar-brand" href="{% url 'folder_market:display_category' %}">
+      <img
+        src="https://icon-library.com/images/icon-categories/icon-categories-8.jpg"
+        class="me-2"
+        height="20"
+        alt="MDB Logo"
+        loading="lazy"
+      />
+      <small>Categories</small>
+      </a>
+      <div class="dropdown">
+      <a class="navbar-brand" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        <img
+        src="https://cdn-icons-png.flaticon.com/512/126/126472.png"
+        class="me-2"
+        height="20"
+        alt="MDB Logo"
+        loading="lazy"
+        />
+      <small>Settings</small>
+      </a>
+
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li><a class="dropdown-item" href="{% url 'auth_market:change_username' %}">
+          Change username
+        </a></li>
+        <li><a class="dropdown-item" href="{% url 'auth_market:change_info' %}">
+          Change password
+        </a></li>
+        {% if request.user.is_staff %}
+        <li><a class="dropdown-item" href="{% url 'folder_market:add_category' %}">
+          Add category
+        </a></li>
+        {% endif %}
+      </ul>
+      <a class="navbar-brand" href="{% url 'auth_market:log_out' %}">
+      <img
+        src="https://w7.pngwing.com/pngs/475/85/png-transparent-computer-icons-logout-angle-text-black-thumbnail.png"
+        class="me-2"
+        height="20"
+        alt="MDB Logo"
+        loading="lazy"
+        />
+      <small>Log out</small>
+      </a>
+</div>
+</nav>
+<table class="table align-middle mb-0 bg-white">
+  <thead class="bg-light">
+    <tr>
+      <th scope="col">Description</th>
+      <th scope="col">Dop info</th>
+    </tr>
+  </thead>
+    {% for item in display_page %}
+    <tr>
+      <td class="table-secondary">
+        <div class="d-flex align-items-center">
+          <span class="badge badge-pill badge-dark">{{item.0.item_id}}</span>
+         <div class="ms-3">
+            <p class="fw-bold mb-1">
+              {{ item.0.name }}
+            </p>
+            <p class="text-muted mb-0">
+              {{ item.0.price }}
+            </p>
+            <p class="text-muted mb-0">
+              {% if item.0.category != None %}
+                {{item.0.category}}
+              {% else %}
+                No category
+              {% endif %}
+            </p>
+          </div>
+          </div>
+      </td>
+      <td class="table-secondary">
+      <div class="ms-3">
+      <p class="fw-bold mb-1">
+        {% if item.0.salesman == None %}
+          Anonymous  user 
+          {% else %}
+          {{ item.0.salesman }}
+          {% endif %}
+      </p>
+      <p class="text-muted mb-0">
+        {{item.0.data_creation}}
+      </p>
+      </div>
+      </td>
+    </tr>
+    {% endfor %}
+</table>
+{% block pagination %}
+<div class="d-flex justify-content-center">
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    {% for page_d in display_page.paginator.get_elided_page_range %}
+    {% if page_d == display_page.paginator.ELLIPSIS  %}
+    <li class="page-item">
+      {{page_d}}
+    </li>
+    {% else %}
+    <li class="page-item">
+      <a class="page-link" href="{% url 'folder_market:index' page_d %}">{{page_d}}</a>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</nav>
+</div>
+{% endblock %}
+</body>
+</html>

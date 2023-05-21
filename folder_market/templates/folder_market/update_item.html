@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body>
+
+<div class="container">
+  
+  <section class="panel panel-default">
+<div class="panel-heading"> 
+<h3 class="panel-title">Update Order</h3> 
+</div> 
+<div class="panel-body">
+<form action="" method="POST" enctype="multipart/form-data">
+	{% csrf_token %}
+  <div class="form-group">
+    <label for="name" class="col-sm-3 control-label">Price</label>
+    <div class="col-sm-9">
+      	{{form.price}}
+    </div>
+  </div> 
+  <div class="form-group">
+    <label for="about" class="col-sm-3 control-label">Description</label>
+    <div class="col-sm-9">
+    	{{form.product_description}}
+    </div>
+  </div>  
+  <div class="form-group">
+    <label for="name" class="col-sm-3 control-label">Download img</label>
+    <div class="col-sm-3">
+      	{{form.imagine_file}}
+    </div>
+  <hr>
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+    	<input type="submit" class="btn btn-outline-secondary"name="form-update" value ="Send">
+    </div>
+  </div> 
+</form>
+<form id="form1" action="" method="POST">
+     {% csrf_token %}
+     <button class="btn btn-outline-danger" type="submit" name="form-delete">
+        <i class="fa fa-shopping-basket"></i> Remove
+     </button>
+</form>
+</div>
+</section>
+</div>
+{% if messages %}
+{% for message in messages %}
+	{{message}}
+{% endfor %}
+{% endif %}
+</body>
+</html>

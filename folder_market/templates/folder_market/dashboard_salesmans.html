@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Salesmans raiting</title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            {% if data_items.username != None %}
+                            <p class="fw-bolder">
+                                {{ data_items.username }}
+                            </p>
+                            {% else %}
+                            <p>To start create trading account</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="{% url 'folder_market:wallet_page' %}">
+                            <img
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWz93g9V8xIS1yApm62ez9QTwVmNHxF-I5TZP8qDJn8HNlzfDh2hf0ZiYrhapRO6BV9TA&usqp=CAU"
+                                class="me-2"
+                                height="20"
+                                alt="MDB Logo"
+                                loading="lazy"
+                            />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-sm-8">
+                        <p class="fw-lighter">
+                            {{ data_items.validator_user }}
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
+                            <a href="{% url 'folder_market:display_basket' %}">
+                            <img
+                                src="https://cdn-icons-png.flaticon.com/512/3721/3721818.png"
+                                class="me-2"
+                                height="20"
+                                alt="MDB Logo"
+                                loading="lazy"
+                            />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-sm-8">
+                        <p class="fw-normal">
+                            {{ data_items.rating }}
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
+                            <a href="{% url 'folder_market:start_trade' %}">
+                            <img
+                                src="https://w7.pngwing.com/pngs/998/466/png-transparent-computer-icons-people-logo-logo-black-silhouette-thumbnail.png"
+                                class="me-2"
+                                height="20"
+                                alt="MDB Logo"
+                                loading="lazy"
+                            />
+                            </a>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <form action="{% url 'folder_market:redirect_index' %}">
+                                <button type="submit" class="btn btn-light" data-mdb-ripple-color="dark">Go back</button>
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                            <p class="fw-bolder">
+                                Statistic
+                            </p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

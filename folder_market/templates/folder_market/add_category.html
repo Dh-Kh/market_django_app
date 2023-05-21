@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add category</title>
+	{% load static %} 
+  	{% load bootstrap5 %}
+  	{% bootstrap_css %}
+  	{% bootstrap_javascript %}
+</head>
+<body>
+<div class="container">
+<form action="" method="POST">
+	{% csrf_token %}
+	<div class="input-group mb-3" style="width: 300px">
+	{{form.category}}
+  	<button class="btn btn-outline-primary" type="submit" id="button-addon1" data-mdb-ripple-color="dark">
+    Button
+  	</button>
+</div>
+</form>
+</div>
+	{% if messages %}
+	{% for message in messages %}
+		{{message}}
+	{% endfor %}
+	{% endif %}
+</body>
+</html>

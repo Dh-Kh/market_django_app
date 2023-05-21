@@ -1,0 +1,8 @@
+*.pyc
+*~
+__pycache__
+venv
+market/enviroment_variables.env
+folder_market/sensitive_ignore.py
+db.sqlite3
+
