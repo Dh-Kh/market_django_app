@@ -6,8 +6,8 @@ Furthermore, the project offers the ability to search for desired items using th
 
 Finally, the project incorporates a recommendation system using the Surprise library. Users can customize the recommendation system according to their preferences.
 ## Installation
-'''
+```
 pip install git+https://github.com/Dh-Kh/market_django_app.git
-'''
+```
 P.S. For the app to work properly, you need to set up an .env file and define your own sensitive data, such as email credentials and secret keys. if you want to dockerize a program the application has a dockerfile.
 
