@@ -2,7 +2,7 @@ import pandas as pd
 from thefuzz import fuzz
 from urllib.parse import quote
 
-df = pd.read_csv(r"C:\Users\Admin\Downloads\phones_data.csv")
+df = pd.read_csv("phones_data.csv")
 
 def check_caregory(user_input):
     for d in df["model_name"]:

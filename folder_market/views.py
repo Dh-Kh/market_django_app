@@ -32,8 +32,8 @@ def index(request, page):
         paginator = Paginator(list(desired_data), per_page=5)
         display_page = paginator.get_page(page)
         context = {"display_page": display_page}
-        return render(request, "folder_market\index.html", context)
-    return render(request, "folder_market\index.html")
+        return render(request, "folder_market/index.html", context)
+    return render(request, "folder_market/index.html")
 
 @login_required
 def dashboard_items(request):
@@ -66,7 +66,7 @@ def dashboard_items(request):
                     messages.error(request, "Error2")
         else:
             messages.error(request, "Error")
-    return render(request, "folder_market\dashboard_items.html", context)
+    return render(request, "folder_market/dashboard_items.html", context)
     
 @login_required
 def update_item(request, check_item):
@@ -115,7 +115,7 @@ def dashboard_salesmans(request):
         data_items = None
         
     context = {"data_items": data_items}
-    return render(request, "folder_market\dashboard_salesmans.html", context)
+    return render(request, "folder_market/dashboard_salesmans.html", context)
 
 @login_required
 def start_trade(request):
@@ -138,7 +138,7 @@ def start_trade(request):
                 return redirect("/folder_market/start_trade")
         else:
             messages.error(request, "Error")
-    return render(request, "folder_market\start_trade.html", context)
+    return render(request, "folder_market/start_trade.html", context)
             
 def search_item(request):
     form = SearchData(request.POST)
@@ -158,9 +158,9 @@ def search_item(request):
                 messages.error(request, google_search_link(desired_input))
             else:
                 context = {"form": form, "desired_list": desired_list}
-                return render(request, "folder_market\search.html", context)
+                return render(request, "folder_market/search.html", context)
             
-    return render(request, "folder_market\search.html", context)
+    return render(request, "folder_market/search.html", context)
 
 def find_your_order(request, id_product):
     try:
