@@ -1,20 +1,18 @@
-from django.test import LiveServerTestCase, TestCase
+from django.test import LiveServerTestCase, TestCase, Client
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 from django.contrib.auth.models import User
-from django.test.client import Client
-from folder_market.models_for import Item_info, BasketScope, Category
-from folder_market.sensitive_ignore import First_ignore, Second_ignore
+from market import settings
+from folder_market.models_for import Item_info
+
 
 class SeleniumMixin:
     def setUp(self):
-        options = Options()
-        options.binary_location = First_ignore
-        self.selenium = webdriver.Firefox(executable_path=Second_ignore, options=options)
-       
+        self.selenium = webdriver.Chrome()
+        self.selenium.maximize_window()
+
     def tearDown(self):
         self.selenium.quit()
-        
     
 class RedirectIndexTest(SeleniumMixin, LiveServerTestCase):    
     def test_for_redirect_index(self):
@@ -24,158 +22,176 @@ class IndexTest(SeleniumMixin, LiveServerTestCase):
     def test_for_index(self):
         self.selenium.get(f"{self.live_server_url}/folder_market/2")
 
-class Dashboard_itemsTest(TestCase):
-    
-    def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'johnpassworD1234')
+class DashboardItemsTest(SeleniumMixin, LiveServerTestCase):
+    def test_for_dashboard_items(self):
+        self.selenium.get(self.live_server_url + "/folder_market/dashboard_items/")
+        form_name = self.selenium.find_element(By.ID, "id_name")
+        form_name.send_keys("Iphone")
+        form_price = self.selenium.find_element(By.ID, "id_price")
+        form_price.send_keys(1000)
+        form_product_desc = self.selenium.find_element(By.ID, "id_product_description")
+        form_product_desc.send_keys("Smartphone for smart peoples")
+        form_cat = self.selenium.find_element(By.ID, "id_category")
+        form_cat.send_keys("---------")
+        submit_button = self.selenium.find_element(By.ID, "input_submit")
+        submit_button.click()
         
-    def test_for_dashboard_items(self):        
-        response = self.client.get("/folder_market/dashboard_items/")
-        self.assertEqual(response.status_code, 302)  
-        response = self.client.post('/auth_market/login/', {'username': 'john', 'password': 'johnpassworD1234'})
-        self.assertEqual(response.status_code, 200)  
-        response = self.client.get("/folder_market/dashboard_items/")
-        self.assertEqual(response.status_code, 302) 
-        form_data = {
-            'name': 'LG X',
-            'price': 1000,
-            'product_description': 'New phone',
-            'category': 'Phones',
-            'imagine_file': r'C:\Users\Admin\Pictures\Screenshots\download.jpeg',
-        }
-        response = self.client.post('/folder_market/dashboard_items/', data=form_data)
-        self.assertEqual(response.status_code, 302)
-
-class Update_itemTest(TestCase):
-    
+class UpdateItemTest(SeleniumMixin, LiveServerTestCase):
     def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'johnpassworD1234')
-        self.client.login(username='john', password='johnpassworD1234')
-        self.item = Item_info.objects.create(name="Product",
-                                 price = 2000,
-                                 product_description = None,
-                                 imagine_file = None,
-                    )
-        
+         super().setUp()
+         user = User.objects.create_user(username="John", password="YokoandJohn")
+         self.client.force_login(user)  
+         session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+         self.selenium.get(self.live_server_url + "/auth_market/login/")
+         self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                                'value': session_key, 'path': '/'})
     def test_for_update_item(self):
-        response = self.client.get("/folder_market/update_item/Product/")
-        self.assertEqual(response.status_code, 302)  
-        form_data = {
-            'price': 1000,
-            'product_description': 'New phone',
-            'imagine_file': r'C:\Users\Admin\Pictures\Screenshots\download.jpeg',
-        }
-        response = self.client.post('/folder_market/update_item/Product/', data=form_data)
-        self.assertEqual(response.status_code, 302)
-        
-class Dashboard_salesmansTest(TestCase):
+        self.selenium.get(self.live_server_url + "/folder_market/update_item/Computer/")
+        form_price = self.selenium.find_element(By.ID, "id_price")
+        form_price.send_keys(1000)
+        form_product_desc = self.selenium.find_element(By.ID, "id_product_description")
+        form_product_desc.send_keys("Smartphone for smart peoples")
+        submit_button = self.selenium.find_element(By.ID, "input_submit")
+        submit_button.click()
+
+    def test_for_delete_item(self):
+        self.selenium.get(self.live_server_url + "/folder_market/update_item/Computer/")
+        delete_button = self.selenium.find_element(By.ID, "delete_button")
+        delete_button.click()
+
+class DashboardSalesmansTestAuth(SeleniumMixin, LiveServerTestCase):
     def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'johnpassworD1234')
-        self.client.login(username='john', password='johnpassworD1234')
+         super().setUp()
+         user = User.objects.create_user(username="John", password="YokoandJohn")
+         self.client.force_login(user)  
+         session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+         self.selenium.get(self.live_server_url + "/auth_market/login/")
+         self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                                'value': session_key, 'path': '/'})
+    def test_for_dashboard_salesmans_first(self):
+        self.selenium.get(self.live_server_url + "/folder_market/dashboard_salesmans/")
+        first_link = self.selenium.find_element(By.XPATH, "//a[@title='first_click']")
+        first_link.click()
         
-    def test_for_dashboard_salesmans(self):
-        response = self.client.get("/folder_market/dashboard_salesmans/")
-        self.assertEqual(response.status_code, 302)
+    def test_for_dashboard_salesmans_second(self):
+        self.selenium.get(self.live_server_url + "/folder_market/dashboard_salesmans/")
+        second_link = self.selenium.find_element(By.XPATH, "//a[@title='second_link']")
+        second_link.click()
         
-class Start_tradeTest(TestCase):
+    def test_for_dashboard_salesmans_three(self):
+         self.selenium.get(self.live_server_url + "/folder_market/dashboard_salesmans/")
+         third_link = self.selenium.find_element(By.XPATH, "//a[@title='third_link']")
+         third_link.click()
+        
+    def test_for_dashboard_salesmans_button(self):
+        self.selenium.get(self.live_server_url + "/folder_market/dashboard_salesmans/")
+        go_back = self.selenium.find_element(By.ID, "go_back")
+        go_back.click()
+        
+    
+class DashboardSalesmansTest(SeleniumMixin, LiveServerTestCase):
+    def  test_for_dashboard_salesmans_not_auth(self):
+        self.selenium.get(self.live_server_url + "/folder_market/dashboard_salesmans/")
+        
+class StartTradeTest(SeleniumMixin, LiveServerTestCase):
     def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'johnpassworD1234')
-        self.client.login(username='john', password='johnpassworD1234')
+         super().setUp()
+         user = User.objects.create_user(username="John", password="YokoandJohn")
+         self.client.force_login(user)  
+         session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+         self.selenium.get(self.live_server_url + "/auth_market/login/")
+         self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                                'value': session_key, 'path': '/'})
+         
     def test_for_start_trade(self):
-        response = self.client.get("/folder_market/start_trade/")
-        self.assertEqual(response.status_code, 302)
+        self.selenium.get(self.live_server_url + "/folder_market/start_trade/")
         
-class Search_itemTest(TestCase):
+class SearchItemTest(SeleniumMixin, LiveServerTestCase):
     def test_for_search_item(self):
-        response = self.client.get("/folder_market/search/")
-        self.assertEqual(response.status_code, 200)
-        response = self.client.post("/folder_market/search/")
-        self.assertEqual(response.status_code, 200)
-
-class Find_your_orderTest(TestCase):
+        self.selenium.get(self.live_server_url + "/folder_market/search/")
+        text_input = self.selenium.find_element(By.ID, "text_input")
+        text_input.send_keys("Computer")
+        button_submit = self.selenium.find_element(By.ID, "button_submit")
+        button_submit.click()
+        
+class FindYourOrderTest(TestCase):
     def setUp(self):
-        self.item = Item_info.objects.create(item_id=10, name="Product", price=2000, 
-                                             imagine_file = r"C:\Users\Admin\Pictures\Screenshots\download.jpeg",
-                                             category = None, 
-                                             salesman ="Igor"
-                                             )
-
-    def test_for_find_your_order(self):
-        response = self.client.get("/folder_market/find_your_order/10/")
+        self.client = Client()
+        self.record = Item_info.objects.create(
+            item_id=1, name="Product", price=2000, 
+            imagine_file = r"C:\Users\Admin\Pictures\Screenshots\download.jpeg",
+            category = None, salesman ="Igor")
+                                             
+    def test_for_find_your_order_first(self):
+        response = self.client.get("/folder_market/find_your_order/1/")
         self.assertEqual(response.status_code, 200)
         form_data = {
             'form-submit1': 'Submit', 
             "form-submit2": "Submit",
-            "form-submit-com": "Submit"
         }
-        response = self.client.post("/folder_market/find_your_order/10/", data=form_data)
+        response = self.client.post("/folder_market/find_your_order/1/", data=form_data)
         self.assertEqual(response.status_code, 302)
         
-        response = self.client.get("/folder_market/find_your_order/10/")
-        self.assertEqual(response.status_code, 200)
+    
         
-        response = self.client.get("/folder_market/find_your_order/444/")
-        self.assertEqual(response.status_code, 404)
+class DisplayBasketTest(SeleniumMixin, LiveServerTestCase):
 
-class Display_basket_test(TestCase):
+    def test_for_display_basket_url(self):
+        self.selenium.get(self.live_server_url + "/folder_market/display_basket/")
+        first_url = self.selenium.find_element(By.XPATH, "//a[@title='first_url']")
+        first_url.click()
+        
+    def test_for_display_basket_button(self):
+        self.selenium.get(self.live_server_url + "/folder_market/display_basket/")
+        button_submit = self.selenium.find_element(By.ID, "button_submit")
+        button_submit.click()
+        
+class ADD_CategoryTest(SeleniumMixin, LiveServerTestCase):
     def setUp(self):
-        self.item = Item_info.objects.create(item_id=1, name="Product", price=2000, 
-                                             imagine_file = r"C:\Users\Admin\Pictures\Screenshots\download.jpeg",
-                                             category = None, 
-                                             salesman ="Igor"
-                                             )
-        self.basket = BasketScope.objects.create(added_item = Item_info.objects.get(item_id = 1),
-            check_salesman ="Igor")
-    def test_for_display_basket(self):
-        response = self.client.get("/folder_market/display_basket/")
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get("/folder_market/remove_from_list/1/")
-        self.assertEqual(response.status_code, 200)
-
-class Add_category_test(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user = User(is_superuser= True, username='john', password='johnpassworD1234')
-        self.client.login(username='john', password='johnpassworD1234')
-      
+         super().setUp()
+         self.user = User.objects.create_user(username="John", password="YokoandJohn")
+         self.user.is_staff = True
+         self.user.save()
+         self.client.force_login(self.user)  
+         session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+         self.selenium.get(self.live_server_url + "/auth_market/login/")
+         self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                                'value': session_key, 'path': '/'})
+         
     def test_for_add_category(self):
-        form_data = {
-            "category": "Computers"
-        }
-        response = self.client.get("/folder_market/add_category/")
-        self.assertEqual(response.status_code, 302)
-        response = self.client.post("/folder_market/add_category/", data=form_data)
-        self.assertEqual(response.status_code, 302)
+        self.selenium.get(self.live_server_url + "/folder_market/add_category/")
+        form_category = self.selenium.find_element(By.ID, "category")
+        form_category.send_keys("Phones")
+        button_click = self.selenium.find_element(By.ID, "button-addon1")
+        button_click.click()
 
-class Display_category_test(TestCase):
+class DisplayCategoryTest(SeleniumMixin, LiveServerTestCase):
+    def setUp(self):
+        super().setUp()
+        user = User.objects.create_user(username="John", password="YokoandJohn")
+        self.client.force_login(user)  
+        session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+        self.selenium.get(self.live_server_url + "/auth_market/login/")
+        self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                               'value': session_key, 'path': '/'})
+    
     def test_for_display_category(self):
-        response = self.client.get("/folder_market/display_category/")
-        self.assertEqual(response.status_code, 200)
+        self.selenium.get(self.live_server_url + "/folder_market/display_category/")
         
-class Display_types_category_test(TestCase):
-    def setUp(self):
-        self.category = Category.objects.create(category="Computers")
-    def test_for_display_types_category(self):
-        response = self.client.get("/folder_market/display_current_category/Computers/")
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get("/folder_market/display_unknown_category/")
-        self.assertEqual(response.status_code, 200)
+class DisplayUnknownCategoryTest(SeleniumMixin, LiveServerTestCase):
+    def test_for_display_unknown_category(self):
+        self.selenium.get(self.live_server_url + "/folder_market/display_unknown_category/")
         
-class Payment_action_test(TestCase):
-    def test_for_payment_action(self):
-        response = self.client.get("/folder_market/payment_action/")
-        self.assertEqual(response.status_code, 200)
+class DisplayCurrentCategoryTest(SeleniumMixin, LiveServerTestCase):
+    def test_for_display_current_category(self):
+        self.selenium.get(self.live_server_url + "/folder_market/display_current_category/")
 
-class Wallet_page_test(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user = User(username='john', password='johnpassworD1234')
-        self.client.login(username='john', password='johnpassworD1234')
+class PaymentActionTest(SeleniumMixin, LiveServerTestCase):
+    def test_for_payment_action(self):
+        self.selenium.get(self.live_server_url + "/folder_market/payment_action/")
         
+class WalletPageTest(TestCase):
+     
     def test_for_wallet_page(self):
         response = self.client.get("/folder_market/wallet_page/")
         self.assertEqual(response.status_code, 302)

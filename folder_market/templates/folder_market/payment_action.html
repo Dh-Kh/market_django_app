@@ -10,6 +10,7 @@
   	{% bootstrap_javascript %}
 </head>
 <body>
+{% if count_items != 0 %}
 <div class="container py-5">
 <div class="row d-flex justify-content-center">
       <div class="col-md-9 col-lg-7 col-xl-5">
@@ -23,7 +24,9 @@
           <div class="rounded-bottom" style="background-color: #eee;">
             <div class="card-body">
               <p class="mb-4">Your list:</p>
-
+                {% if price_check < price_data %}
+                  <p class="mb-4">Anonymous ads is not accepted in e-commerce payment.</p>
+                {% endif %}
               <div class="form-outline mb-3">
                 {% for item in your_items %}
     			{% ifchanged item.added_item.name %} 
@@ -55,8 +58,8 @@
               <hr>
                <div class="form-outline mb-3">
                 <p>Sum {% for k, v in price_dict.items %}
-					<p>{{k}} {{v}}</p>
-					{% endfor %}
+					       <p>{{k}} {{v}}</p>
+					       {% endfor %}
 				</p>
               </div>
             </div>
@@ -65,12 +68,26 @@
       </div>
     </div>
   </div>
-{% if messages %}
-	{% for i in messages %}
-		{{i}}
-	{% endfor %}
-{% endif %}
 </div>
+{% else %}
+<div class="container-fluid  mt-100">
+  <div class="row">     
+    <div class="col-md-12">  
+        <div class="card">
+          <div class="card-header">
+          <h5>Basket</h5>
+          </div>
+          <div class="card-body cart">
+              <div class="col-sm-12 empty-cart-cls text-center">
+                <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                <h3><strong>Your basket is empty</strong></h3>  
+                <a href="{% url 'folder_market:redirect_index' %}" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+                </div>
+            </div>
+        </div> 
+      </div>
+    </div>
+</div>
+{% endif %}
 </body>
-
 </html>

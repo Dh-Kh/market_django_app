@@ -41,11 +41,7 @@ class BasketScope(models.Model):
     check_salesman = models.CharField(max_length=100, null=True)
     
     
-class UserComments(models.Model):
-    comment_item = models.CharField(max_length=100)
-    time_creation = models.DateTimeField(auto_now_add=True)
-    comment_body = models.CharField(max_length=700)
-    comment_user = models.CharField(max_length=100, null=True)
+
     
 
 

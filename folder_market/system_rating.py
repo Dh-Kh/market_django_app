@@ -1,28 +1,36 @@
-from surprise import Dataset, Reader
+from surprise import Dataset, SVD, Reader
+from .models_for import RatingStorage
+import numpy as np
 import pandas as pd
-from surprise import SVD
-from django.contrib.auth import get_user_model
-from .models_for import Item_info, RatingStorage
+from random import randint
 
-all_users = get_user_model().objects.values("username")  
-all_items = Item_info.objects.values("item_id")
-all_rating = RatingStorage.objects.values("rating_storage")
+def getting_rating_data():      
+    rating_storage = RatingStorage.objects.all()
+    list_of_data = []
+    for rs in rating_storage:
+        list_of_data.append([rs.id_connector.name, rs.unique_user, rs.rating_storage])
+    np_name = []
+    np_user = []
+    np_rating = []
+    for ls in list_of_data:
+        name, user_data ,rating_data = ls
+        np_name.append(name)
+        np_user.append(user_data)
+        np_rating.append(rating_data)
+    np_name = np.array(np_name)
+    np_user = np.array(np_user)
+    np_rating = np.array(np_rating)
+    return np_name, np_user ,np_rating        
+
 
 
 def recommendation_func(request):
-    rating_data = {
-        "item": [user["username"] for user in all_users].extend([]),
-        "user": [[item["item_id"] for item in all_items]].extend([]),
-        "rating": [rating["rating_storage"] for rating in all_rating],
-    }
-    pandas_rating = pd.DataFrame(rating_data)
     reader = Reader()
-    data = Dataset.load_from_df(pandas_rating, reader)
-    algo = SVD()
-    algo.fit(data.build_full_trainset())
-    
-    pre_user = request
-    pre_id = 1
-    prediction = algo.predict(pre_user, pre_id)
+    dataframe = pd.read_csv("dataset_rec.csv")
+    dataset = Dataset.load_from_df(dataframe, reader)
+    machine = SVD()
+    machine.fit(dataset.build_full_trainset())
+    random_data = randint(0, len(dataframe) - 1)
+    prediction = machine.predict(request, random_data)
     return prediction.est
 

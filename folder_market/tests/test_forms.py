@@ -1,6 +1,6 @@
 from django.test import TestCase
 from folder_market.forms import (addItem, ChangeItem, SearchData, CreateSalesmans, 
-                                 OnlyForSubmit, OnlyForDelete, ForCommentsOnly, CreateCategory, AddCard)
+                                 OnlyForSubmit, OnlyForDelete, CreateCategory, AddCard)
 
 class Test_addItem(TestCase):
     def test_for_addedItem(self):
@@ -63,13 +63,6 @@ class OnlyForDelete_test(TestCase):
         OnlyForDelete(
             data = {
                 "submit": " "
-                }
-            )
-class ForCommentsOnly_test(TestCase):
-    def test_for_ForCommentsOnly(self):
-        ForCommentsOnly(
-            data = {
-                "comment_body", "hello"
                 }
             )
         

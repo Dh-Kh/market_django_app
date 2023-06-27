@@ -26,7 +26,7 @@
                             {% endif %}
                         </div>
                         <div class="col-sm-4">
-                            <a href="{% url 'folder_market:wallet_page' %}">
+                            <a href="{% url 'folder_market:wallet_page' %}" title="third_link">
                             <img
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWz93g9V8xIS1yApm62ez9QTwVmNHxF-I5TZP8qDJn8HNlzfDh2hf0ZiYrhapRO6BV9TA&usqp=CAU"
                                 class="me-2"
@@ -44,7 +44,7 @@
                         </p>
                     </div>
                     <div class="col-sm-4">
-                            <a href="{% url 'folder_market:display_basket' %}">
+                            <a href="{% url 'folder_market:display_basket' %}" title="first_click">
                             <img
                                 src="https://cdn-icons-png.flaticon.com/512/3721/3721818.png"
                                 class="me-2"
@@ -62,7 +62,7 @@
                         </p>
                     </div>
                     <div class="col-sm-4">
-                            <a href="{% url 'folder_market:start_trade' %}">
+                            <a href="{% url 'folder_market:start_trade' %}" title="second_link">
                             <img
                                 src="https://w7.pngwing.com/pngs/998/466/png-transparent-computer-icons-people-logo-logo-black-silhouette-thumbnail.png"
                                 class="me-2"
@@ -77,7 +77,7 @@
                     <div class="row">
                         <div class="col-sm-8">
                             <form action="{% url 'folder_market:redirect_index' %}">
-                                <button type="submit" class="btn btn-light" data-mdb-ripple-color="dark">Go back</button>
+                                <button type="submit" id = "go_back" class="btn btn-light" data-mdb-ripple-color="dark">Go back</button>
                             </form>
                         </div>
                         <div class="col-sm-4">

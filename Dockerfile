@@ -5,4 +5,5 @@ COPY requirements.txt /app/
 RUN pip install -r requirements.txt --no-cache-dir
 COPY . /app/
 COPY phones_data.csv /app/phones_data.csv
+COPY dataset_rec.csv /app/dataset_rec.csv
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

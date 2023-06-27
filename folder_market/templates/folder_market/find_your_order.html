@@ -1,99 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Data of object</title>
-	{% load static %} 
-  	{% load bootstrap5 %}
-  	{% bootstrap_css %}
-  	{% bootstrap_javascript %}
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data of object</title>
+    {% load static %} 
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
-
 <body>
-<div class="container">
-    <div class="row clearfix">
-        <div class="col-lg-3 col-md-4 col-sm-12">
-            <div class="card product_item">
-                <div class="body">
-                    <div class="cp_img">
-                        <div class="hover">
-                            <form id="form1" action="" method="POST">
-                                {% csrf_token %}
-                                <button class="btn btn-outline-secondary" type="submit" name="form-submit1" >
-                                    <i class="fa fa-shopping-basket"></i> Add to Cart
-                                </button>
-                            </form>
-
-                            <form id="form2" action="" method="POST">
-                                {% csrf_token %}
-                                <button class="btn btn-outline-danger" type="submit" name="form-submit2">
-                                    <i class="fa fa-trash"></i> Remove from Cart
-                                </button>
-                            </form>
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <a href="{% url 'folder_market:search_item' %}" class="navbar-brand" title="first_link">Search</a>
+    <a href="{% url 'folder_market:redirect_index' %}" class="navbar-brand">Main page</a>
+    <form id="form1" action="" method="POST">
+        {% csrf_token %}
+        <button class="btn btn-outline-secondary" type="submit" name="form-submit1">
+            <i class="fa fa-shopping-basket"></i> Add to Cart
+        </button>
+    </form>
+    <form id="form2" action="" method="POST">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger" type="submit" name="form-submit2">
+        <i class="fa fa-trash"></i> Remove from Cart
+        </button>
+    </form>   
+    <form id="form" action="" method="POST" class="d-flex">
+    {% csrf_token %}
+    {{form.rating}}
+    <input type="submit" class="form-control me-2" name="form-submit" value="Rate">
+    </form>
+  </div>
+</nav>
+    <div class="container d-flex justify-content-center mt-50 mb-50">        
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card card-body">
+                    <div class="media align-items-center align-items-lg-start text-center text-lg-left flex-column flex-lg-row">
+                        <div class="mr-2 mb-3 mb-lg-0">            
+                            {% if item_id.imagine_file == None %}
+                            <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                            {% else %}
+                            <img src="{{item_id.imagine_file.url}}" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                            {% endif %}            
                         </div>
-                    </div>
-                    <div class="product_details">
-                        <h5>{{item_id.name}}</h5>
-                        {% if item_id.imagine_file == None %}
-                        <img
-                            src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg"
-                            class="img-fluid rounded-3" alt="Cotton T-shirt">
-                        {% else %}
-                        <img
-                            src="{{item_id.imagine_file.url}}"
-                            class="img-fluid rounded-3" alt="Cotton T-shirt">
-                        {% endif %}
-                        <ul class="product_price list-unstyled">
-                            <li><strong>Price:</strong> {{item_id.price}}</li>
-                            <li><strong>Created:</strong> {{item_id.data_creation}}</li>
-                            <li><strong>Salesman:</strong> {% if item_id.salesman != None %}
-                                {{item_id.salesman}}
+                        <div class="media-body">
+                            <h6 class="media-title font-weight-semibold">
+                                <h5>{{item_id.name}}</h5>
+                            </h6>
+
+                            <ul class="list-inline list-inline-dotted mb-3 mb-lg-2">
+                                <li class="list-inline-item"><strong>Price:</strong> {{item_id.price}}</li>
+                                <li class="list-inline-item"><strong>Created:</strong> {{item_id.data_creation}}</li>
+                                <li class="list-inline-item"><strong>Salesman:</strong> {% if item_id.salesman != None %}
+                                    {{item_id.salesman}}
+                                    {% else %}
+                                    Anonymous user
+                                    {% endif %}
+                                </li>
+                                {% if item_id.product_description != None %}
+                                <li class="list-inline-item"><strong>Info: </strong>{{item_id.product_description}}</li>
                                 {% else %}
-                                Anonymous user
+                                <li class="list-inline-item"><strong>Info:</strong> No info available</li>
+                                <li class="list-inline-item"><strong>Item ID:</strong> {{item_id.item_id}}</li>
                                 {% endif %}
-                            </li>
-                            <li><strong>Item ID:</strong> {{item_id.item_id}}</li>
-                        </ul>
-                        <form id="form" action="" method="POST">
-                            {% csrf_token %}
-                            {{form.rating}}
-                            <input type="submit" class="btn btn-primary" name="form-submit" value="Rate">
-                        </form>
-                    </div>
-                    <a class="navbar-brand" href="{% url 'folder_market:redirect_index' %}">Return</a>
-					<a class="navbar-brand" href="{% url 'folder_market:search_item' %}">Search</a>
-                </div>
-            </div>
+                            </ul>
+                        </div>
+                    </div>                  
+                </div>  
+            </div>                     
         </div>
     </div>
-  <div class="col-md-8 col-lg-6">
-    <div class="card shadow-0 border" style="background-color: #f0f2f5;">
-      <div class="card-body p-4">
-        <div class="form-outline mb-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <form id="form_com" action="" method="POST">
-                {% csrf_token %}
-                <p>{{form_com.comment_body}}</p>
-                <p class="small mb-0 ms-2">{{form_com.comment_user}}</p>
-            <div class="d-flex justify-content-between">
-              <div class="d-flex flex-row align-items-center">
-                <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" alt="avatar" width="25"
-                  height="25" />
-                <input type="submit" class="btn btn-primary" name="form-submit-com" value="Rate">
-            </form>
-              </div>
-            </div>
-          </div>
-</div>
-
-{% block content %}
-{% if messages %}
-	{% for i in messages %}
-		{{i}}
-	{% endfor %}
+    {% block content %}
+    {% if messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {% for i in messages %}
+            {{i}}
+        {% endfor %}
+        <button type="button" id="actionField" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
 {% endif %}
 {% endblock %}
 </body>

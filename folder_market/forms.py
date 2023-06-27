@@ -1,5 +1,5 @@
 from django import forms
-from .models_for import Item_info, Salesman_info, UserComments, Category
+from .models_for import Item_info, Salesman_info, Category
 from captcha.fields import CaptchaField
 
 class addItem(forms.ModelForm):
@@ -33,11 +33,6 @@ class OnlyForSubmit(forms.Form):
 class OnlyForDelete(forms.Form):
     delete = forms.CharField(required=False, widget=forms.HiddenInput())
     
-class ForCommentsOnly(forms.ModelForm):
-    comment_body = forms.CharField(required=True, widget= forms.Textarea())
-    class Meta:
-        model = UserComments 
-        fields = ["comment_body"]
     
 class CreateCategory(forms.ModelForm):
     class Meta:

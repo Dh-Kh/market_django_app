@@ -41,13 +41,13 @@
   <hr>
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
-    	<input type="submit" class="btn btn-outline-secondary"name="form-update" value ="Send">
+    	<input type="submit" id = "input_submit" class="btn btn-outline-secondary"name="form-update" value ="Send">
     </div>
   </div> 
 </form>
 <form id="form1" action="" method="POST">
      {% csrf_token %}
-     <button class="btn btn-outline-danger" type="submit" name="form-delete">
+     <button type="submit" id = "delete_button" class="btn btn-outline-danger" name="form-delete">
         <i class="fa fa-shopping-basket"></i> Remove
      </button>
 </form>
