@@ -73,5 +73,11 @@
     </div>
   </div>
 </section>
+{% if messages %}
+{{form.error}}
+{% for message in messages %}
+{{message}}
+{% endfor %}
+{% endif %} 
 </body>
 </html>

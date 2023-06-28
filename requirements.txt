@@ -26,6 +26,7 @@ packaging==23.1
 pandas==2.0.1
 Pillow==9.5.0
 pycparser==2.21
+pyotp==2.8.0
 PySocks==1.7.1
 pyspellchecker==0.7.2
 python-dateutil==2.8.2

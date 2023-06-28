@@ -25,6 +25,7 @@
                             <p>To start create trading account</p>
                             {% endif %}
                         </div>
+                        {% if data_items.username != None %}
                         <div class="col-sm-4">
                             <a href="{% url 'folder_market:wallet_page' %}" title="third_link">
                             <img
@@ -36,6 +37,7 @@
                             />
                             </a>
                         </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                     <div class="col-sm-8">

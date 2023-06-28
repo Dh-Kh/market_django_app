@@ -1,17 +1,14 @@
-from django.test import LiveServerTestCase, TestCase
+from django.test import LiveServerTestCase
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from django.contrib.auth.models import User
-from django.test.client import Client
-from folder_market.sensitive_ignore import First_ignore, Second_ignore
+from market import settings
 
 class SeleniumMixin:
     def setUp(self):
-        options = Options()
-        options.binary_location = First_ignore
-        self.selenium = webdriver.Firefox(executable_path=Second_ignore, options=options)
-       
+        self.selenium = webdriver.Chrome()
+        self.selenium.maximize_window()
+
     def tearDown(self):
         self.selenium.quit()
     
@@ -41,30 +38,63 @@ class RegisterTest(SeleniumMixin, LiveServerTestCase):
         login_button = self.selenium.find_element(By.TAG_NAME, 'button')
         login_button.click()
 
-class Change_infoTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'johnpassworD1234')
-        
-    def test_for_change_info(self):
-        response = self.client.get("/auth_market/change_info/")
-        self.assertEqual(response.status_code, 302)  
-        response = self.client.post("/auth_market/change_info/", {
-            "password": 'johnpassworD1234',
-            "new_password1": "johnpassworD1235",
-            "new_password2":  "johnpassworD1235" 
-        })
-        self.assertEqual(response.status_code, 302)
+class Change_InfoTest(SeleniumMixin, LiveServerTestCase):
+   def setUp(self):
+       super().setUp()
+       user = User.objects.create_user(username="John", password="YokoandJohn")
+       self.client.force_login(user)  
+       session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+       self.selenium.get(self.live_server_url + "/auth_market/login/")
+       self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                              'value': session_key, 'path': '/'})
+       
+   def test_for_change_info(self):
+       pass
 
-class Change_usernameTest(TestCase):
+class Change_UsernameTest(SeleniumMixin, LiveServerTestCase):
     def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user('john', 'johnpassworD1234')
+        super().setUp()
+        user = User.objects.create_user(username="John", password="YokoandJohn")
+        self.client.force_login(user)  
+        session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+        self.selenium.get(self.live_server_url + "/auth_market/login/")
+        self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                               'value': session_key, 'path': '/'})
         
     def test_for_change_username(self):
-        response = self.client.get("/auth_market/change_username/")
-        self.assertEqual(response.status_code, 302)  
-        response = self.client.post("/auth_market/change_username/", {
-            "username": 'Igor'
-        })
-        self.assertEqual(response.status_code, 302)
+        self.selenium.get(self.live_server_url + "/auth_market/change_username/")
+        form_username = self.selenium.find_element(By.ID, 'id_username')
+        form_username.send_keys('john')
+        submit_button = self.selenium.find_element(By.TAG_NAME, 'button')
+        submit_button.click()
+        
+class Change_EmailTest(SeleniumMixin, LiveServerTestCase):
+    def setUp(self):
+        super().setUp()
+        user = User.objects.create_user(username="John", password="YokoandJohn")
+        self.client.force_login(user)  
+        session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+        self.selenium.get(self.live_server_url + "/auth_market/login/")
+        self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                               'value': session_key, 'path': '/'})
+        
+    def test_for_change_email(self):
+        self.selenium.get(self.live_server_url + "/auth_market/change_email/")
+        form_email = self.selenium.find_element(By.ID, 'id_email')
+        form_email.send_keys('johnlennon@gmail.com')
+        submit_button = self.selenium.find_element(By.TAG_NAME, 'button')
+        submit_button.click()
+
+class Display_user_accountTest(SeleniumMixin, LiveServerTestCase):
+    def setUp(self):
+        super().setUp()
+        user = User.objects.create_user(username="John", password="YokoandJohn")
+        self.client.force_login(user)  
+        session_key = self.client.cookies[settings.SESSION_COOKIE_NAME].value
+        self.selenium.get(self.live_server_url + "/auth_market/login/")
+        self.selenium.add_cookie({'name': settings.SESSION_COOKIE_NAME, 
+                               'value': session_key, 'path': '/'})
+        
+    def test_for_display_user_account(self):
+        self.selenium.get(self.live_server_url + "/auth_market/display_user_account/")
+

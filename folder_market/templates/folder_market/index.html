@@ -72,6 +72,12 @@
         <li><a class="dropdown-item" href="{% url 'auth_market:change_info' %}">
           Change password
         </a></li>
+        <li><a class="dropdown-item" href="{% url 'auth_market:change_email' %}">
+          Change email
+        </a></li>
+        <li><a class="dropdown-item" href="{% url 'auth_market:display_user_account' %}">
+          Account data
+        </a></li>
         {% if request.user.is_staff %}
         <li><a class="dropdown-item" href="{% url 'folder_market:add_category' %}">
           Add category

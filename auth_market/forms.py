@@ -14,6 +14,7 @@ class RegisterForm(UserCreationForm, forms.Form):
         fields =  ("username", "password1", "password2")
 
 class FormChange(PasswordChangeForm):
+    verification_field = forms.CharField(required=False)
     class Meta:
         model = User
         fields = []
@@ -23,7 +24,12 @@ class ChangeUsername(forms.ModelForm):
         model = User
         fields = ('username',)
         
-
+class Change_Email(forms.ModelForm):
+    verification_field = forms.CharField(required=False)
+    class Meta:
+        model = User
+        fields = ("email",)
+        
 class CustomUserAdmin(UserAdmin):
     def get_form(self, request, obj = None,**kwargs):
         form = super().get_form(request, obj, **kwargs)

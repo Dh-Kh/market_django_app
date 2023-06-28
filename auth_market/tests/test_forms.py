@@ -1,6 +1,6 @@
 from django.test import TestCase
 from auth_market.forms import (
-    RegisterForm, FormChange, ChangeUsername
+    RegisterForm, FormChange, ChangeUsername, Change_Email
     )
 from django.contrib.auth.models import User
 
@@ -34,3 +34,9 @@ class Test_ChangeUsername(TestCase):
             "username": "Igor"
             })
         self.assertTrue(form.is_valid())
+        
+class Test_ChangeEmail(TestCase):
+    def test_for_change_email(self):
+        form = Change_Email(data={"email": "flask_django@gmail.com"})
+        self.assertTrue(form.is_valid())
+

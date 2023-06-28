@@ -40,10 +40,10 @@
                 <div class="card card-body">
                     <div class="media align-items-center align-items-lg-start text-center text-lg-left flex-column flex-lg-row">
                         <div class="mr-2 mb-3 mb-lg-0">            
-                            {% if item_id.imagine_file == None %}
-                            <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                            {% if item_id.imagine_file %}
+                                <img src="{{item_id.imagine_file.url}}" class="img-fluid rounded-3" alt="Cotton T-shirt">
                             {% else %}
-                            <img src="{{item_id.imagine_file.url}}" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                            <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-fluid rounded-3" alt="Cotton T-shirt">
                             {% endif %}            
                         </div>
                         <div class="media-body">

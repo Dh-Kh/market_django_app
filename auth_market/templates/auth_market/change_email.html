@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Change username</title>
+	<title>Change email</title>
 	{% load static %}
 	{% load bootstrap5 %}
 	{% bootstrap_css %}
@@ -14,9 +14,11 @@
   <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-xl-9">
-
-        <h1 class="text-white mb-4">Change username</h1>
-
+        {% if email_check == "" %}
+        <h1 class="text-white mb-4">Create e-mail</h1>
+        {% else %}
+        <h1 class="text-white mb-4">Change e-mail</h1>
+        {% endif %}
         <div class="card" style="border-radius: 15px;">
           <div class="card-body">
           	<form action="" method="POST">
@@ -24,11 +26,11 @@
             <div class="row align-items-center pt-4 pb-3">
               <div class="col-md-3 ps-5">
 
-                <h6 class="mb-0">New username</h6>
+                <h6 class="mb-0">New email</h6>
 
               </div>
               <div class="col-md-9 pe-5">
-                  {{form.username}}
+                {{form.email}}
               </div>
             </div>
             <hr class="mx-n3">
