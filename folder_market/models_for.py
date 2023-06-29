@@ -19,7 +19,7 @@ class Category(models.Model):
     
 class Item_info(models.Model):
     item_id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     price = models.FloatField()
     data_creation = models.DateTimeField(auto_now_add=True)
     imagine_file = models.FileField(upload_to="images/", null=True, blank=True, verbose_name="")
